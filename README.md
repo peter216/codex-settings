@@ -8,7 +8,7 @@ A curated collection of configurations and custom prompts for [OpenAI Codex CLI]
 
 This repository provides:
 
-- **Flexible Configuration**: Support for multiple model providers (LiteLLM, GitHub Copilot, DeepSeek, Ollama)
+- **Flexible Configuration**: Support for multiple model providers (LiteLLM/Copilot proxy, ChatGPT subscription, Azure OpenAI, OpenRouter, ModelScope, Kimi)
 - **Custom Prompts**: Reusable prompt templates for common development tasks
 - **Best Practices**: Pre-configured settings optimized for development workflows
 - **Easy Setup**: Simple installation and configuration process
@@ -43,18 +43,19 @@ The default `config.toml` uses LiteLLM as a gateway. To use it:
 
    ```yaml
    general_settings:
-   master_key: sk-dummy
+     master_key: sk-dummy
    litellm_settings:
-   drop_params: true
+     drop_params: true
    model_list:
    - model_name: gpt-5
-   litellm_params:
-      model: github_copilot/gpt-5
-      extra_headers:
-         editor-version: "vscode/1.85.1"           # Editor version
-         editor-plugin-version: "copilot/1.155.0"  # Plugin version
-         Copilot-Integration-Id: "vscode-chat"     # Integration ID
-         user-agent: "GithubCopilot/1.155.0"       # User agent
+     litellm_params:
+       model: github_copilot/gpt-5
+       extra_headers:
+         editor-version: "vscode/1.104.3"
+         editor-plugin-version: "copilot-chat/0.26.7"
+         Copilot-Integration-Id: "vscode-chat"
+         user-agent: "GitHubCopilotChat/0.26.7"
+         x-github-api-version: "2025-04-01"
    ```
 
 1. Start LiteLLM proxy:
@@ -75,9 +76,9 @@ The default `config.toml` uses LiteLLM as a gateway. To use it:
 ### Main Configuration
 
 - [config.toml](config.toml): Default configuration using LiteLLM gateway
-  - Model: `gpt-5`
-  - Approval policy: `on-request`
-  - Reasoning: High effort with detailed summaries
+  - Model: `gpt-5` via `model_provider = "github"` (Copilot proxy on http://localhost:4000)
+  - Approval policy: `on-request`; reasoning summary: `detailed`; reasoning effort: `high`; raw agent reasoning visible
+  - MCP servers: `claude` (local), `exa` (hosted), `chrome` (DevTools over `npx`)
 
 ### Alternative Configurations
 
@@ -116,33 +117,33 @@ Alternatively, you can also copy [.specify](.specify) to your project root direc
 
 Available commands:
 
-- `/prompts:constitution` - Create or update governing principles and development guidelines.
-- `/prompts:specify` - Define requirements and user stories for the desired outcome.
-- `/prompts:clarify` - Resolve underspecified areas (run before `/prompts:plan` unless explicitly skipped).
-- `/prompts:plan` - Generate a technical implementation plan for the chosen stack.
-- `/prompts:tasks` - Produce actionable task lists for implementation.
-- `/prompts:analyze` - Check consistency and coverage after `/prompts:tasks` and before `/prompts:implement`.
-- `/prompts:implement` - Execute all tasks to build the feature according to the plan.
+- `/prompts:constitution` - Create or update the project constitution from interactive or provided principle inputs.
+- `/prompts:specify` - Create or update the feature specification from a natural language feature description.
+- `/prompts:clarify` - Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions.
+- `/prompts:plan` - Execute the implementation planning workflow using the plan template to generate design artifacts.
+- `/prompts:tasks` - Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.
+- `/prompts:analyze` - Perform a non-destructive cross-artifact consistency and quality analysis across spec.md, plan.md, and tasks.md.
+- `/prompts:implement` - Execute the implementation plan by processing and executing all tasks defined in tasks.md.
 
 ### Kiro Spec Workflow
 
 **Kiro Workflow** - Complete feature development from spec to execution. The Kiro commands provide a structured workflow for feature development:
 
-1. `/prompts:kiro-spec-creator [feature]` - Create requirements and acceptance criteria
-2. `/prompts:kiro-feature-designer [feature]` - Develop architecture and component design
-3. `/prompts:kiro-task-planner [feature]` - Generate implementation task lists
-4. `/prompts:kiro-task-executor [feature] [task]` - Execute specific implementation tasks
-5. `/prompts:kiro-assistant [question]` - Quick development assistance
+1. `/prompts:kiro-spec-creator [feature]` - Create comprehensive specs with requirements and EARS acceptance criteria in `.kiro/specs/`
+2. `/prompts:kiro-feature-designer [feature]` - Create design documents with research and architecture based on requirements
+3. `/prompts:kiro-task-planner [feature]` - Generate actionable, test-driven implementation task lists from designs
+4. `/prompts:kiro-task-executor [feature] [task]` - Execute specific implementation tasks from feature specifications
+5. `/prompts:kiro-assistant [question]` - Quick development assistance with a relaxed, developer-focused approach
 
 ### Other Prompts
 
-- `/prompts:deep-reflector` - Capture session retrospectives, user preferences, and follow-up actions.
-- `/prompts:insight-documenter` - Record technical breakthroughs and update the breakthroughs index.
-- `/prompts:instruction-reflector` - Audit and refine the AGENTS.md instructions for Codex.
-- `/prompts:github-issue-fixer 1234` - Run the full GitHub issue workflow from planning through PR creation.
-- `/prompts:github-pr-reviewer 1234` - Conduct structured PR reviews focused on actionable findings.
-- `/prompts:ui-engineer [requirements]` - Deliver or review frontend implementations with modern UI standards.
-- `/prompts:prompt-creator [requirements]` - Scaffold new Codex prompts following best-practice structure.
+- `/prompts:deep-reflector` - Analyze development sessions to extract learnings, patterns, and improvements for future interactions.
+- `/prompts:insight-documenter [breakthrough]` - Capture and document significant technical breakthroughs into reusable knowledge assets.
+- `/prompts:instruction-reflector` - Analyze and improve Codex instructions in AGENTS.md based on conversation history.
+- `/prompts:github-issue-fixer [issue-number]` - Systematically analyze, plan, and implement fixes for GitHub issues with PR creation.
+- `/prompts:github-pr-reviewer [pr-number]` - Perform thorough GitHub pull request code analysis and review.
+- `/prompts:ui-engineer [requirements]` - Create production-ready frontend solutions with modern UI/UX standards.
+- `/prompts:prompt-creator [requirements]` - Create Codex custom prompts with proper structure and best practices.
 
 ### Creating Custom Prompts
 
