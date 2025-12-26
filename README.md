@@ -48,25 +48,39 @@ The default `config.toml` uses LiteLLM as a gateway. To use it:
    litellm_settings:
      drop_params: true
    model_list:
-   - model_name: gpt-5
+   - model_name: gpt-5.1-codex-max
+     model_info:
+       mode: responses
+       supports_vision: true
      litellm_params:
-       model: github_copilot/gpt-5
+       model: github_copilot/gpt-5.1-codex-max
+       drop_params: true
        extra_headers:
-         editor-version: "vscode/1.104.3"
+         editor-version: "vscode/1.95.0"
          editor-plugin-version: "copilot-chat/0.26.7"
-         Copilot-Integration-Id: "vscode-chat"
-         user-agent: "GitHubCopilotChat/0.26.7"
-         x-github-api-version: "2025-04-01"
+   - model_name: claude-opus-4.5
+     litellm_params:
+       model: github_copilot/claude-opus-4.5
+       drop_params: true
+       extra_headers:
+         editor-version: "vscode/1.95.0"
+         editor-plugin-version: "copilot-chat/0.26.7"
+   - model_name: "*"
+     litellm_params:
+       model: "github_copilot/*"
+       extra_headers:
+         editor-version: "vscode/1.95.0"
+         editor-plugin-version: "copilot-chat/0.26.7"
    ```
 
-1. Start LiteLLM proxy:
+2. Start LiteLLM proxy:
 
    ```bash
    litellm --config ~/.codex/litellm_config.yaml
    # Runs on http://localhost:4000 by default
    ```
 
-1. Run Codex:
+3. Run Codex:
 
    ```bash
    codex
