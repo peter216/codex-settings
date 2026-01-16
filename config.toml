@@ -1,12 +1,23 @@
 # Codex CLI Configuration
 # This configuration uses ChatGPT subscription, you'd need to run 'codex login'.
 model = "gpt-5-codex"
+# model = "gpt-5.1-codex-mini"
 model_reasoning_summary = "detailed"
 show_raw_agent_reasoning = true
 model_verbosity = "medium"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model_reasoning_effort = "high"
+# model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
+sandbox_workspace_write.network_access = true
+# Allow access to ~/.cache
+sandbox_workspace_write.path_access = ["/home/peter216/.cache"]
+sandbox_workspace_read.path_access = [
+    "/home/peter216",
+    "/home/peter216/bin",
+    "/home/peter216/.local/bin",
+]
+
 
 [features]
 skills = true

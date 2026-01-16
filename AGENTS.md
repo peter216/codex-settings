@@ -1,5 +1,102 @@
 # AGENTS.md
 
+## Specific Instructions
+
+### Logging and Debugging
+
+Activation & Scope
+
+Trigger keyword: log-on
+
+When the user includes the keyword log-on, enter Logging Mode for the remainder of this subthread unless explicitly turned off.
+
+Logging Mode applies only to this subthread and should not be assumed elsewhere.
+
+Logging Mode — Core Behavior
+
+When Logging Mode is active, you MUST:
+
+Log carefully during all actions
+
+Briefly describe what you are doing and why, before or alongside the result.
+
+Prefer concise, structured logs over prose.
+
+Make reasoning visible but bounded
+
+Summarize reasoning steps at a high level.
+
+Do not include hidden chain-of-thought; instead provide:
+
+assumptions
+
+checks performed
+
+confidence level where relevant
+
+Acknowledge uncertainty explicitly
+
+If information is incomplete, say so.
+
+If you are making an inference, label it clearly.
+
+Preserve continuity
+
+Treat prior logs in this subthread as state.
+
+Do not silently drop constraints or earlier decisions.
+
+Logging Format (Lightweight, Sticky)
+
+Use this format whenever practical:
+
+[LOG]
+Intent:
+Action:
+Checks:
+Result:
+Confidence: X%
+
+The log may be shortened for trivial steps, but must still be present.
+
+If a step is skipped, say why.
+
+Priority Handling
+
+Logging Mode takes precedence over:
+
+verbosity minimization
+
+stylistic brevity defaults
+
+If a higher-priority system constraint conflicts, log the conflict instead of silently complying.
+
+Deactivation
+
+Logging Mode remains active until the user says:
+
+log-off
+
+or explicitly requests no logging
+
+Self-Check (Internal Reminder)
+
+Before responding while Logging Mode is active, ask:
+
+“Have I logged my intent and actions clearly for this step?”
+
+If not, revise before responding.
+
+### Python
+
+#### Package Management
+
+- Use `/home/peter216/.local/bin/uv` only for managing virtual environments.
+- `/home/peter216/bin/uvp` wraps `uv` with the current `PROJECT_NAME` (from the nearest `.uv/pyproject.toml`) and the parent directory of the active virtualenv, so run it inside an activated `uv` environment when you need to add/remove/list packages or run project-scoped commands.
+- `/home/peter216/bin/uv_setup.sh` bootstraps a new `uv` project: it initializes the project folder, creates the `.uv` symlink, spins up a `.venv`, syncs any `pyproject.toml`/`requirements*.txt` metadata, and adds `ipython` as a dev dependency.
+- `auto_venv.sh` walks up from the current directory to find the closest `.uv/.venv`, activates it, exports `PROJECT_NAME`, and loads any `.env`/`.loadenv` variables while keeping track of the ones it manages.
+- `~/.bashrc` ensures `~/.local/bin`, `~/.uv/.venv/bin`, and other user toolchains are early on your PATH, sources helper scripts (including `auto_venv.sh`/`uvp`), and arranges `PROMPT_COMMAND` to rerun `auto_venv` plus path deduping every prompt unless `NOAUTOENV=1`.
+
 ## Repository Structure
 
 ```plaintext
