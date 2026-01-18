@@ -125,6 +125,9 @@ Custom prompts are stored in the `prompts/` directory. Access them via the `/pro
 - `/prompts:github-pr-reviewer [pr-number]` - Perform thorough GitHub pull request code analysis and review.
 - `/prompts:ui-engineer [requirements]` - Create production-ready frontend solutions with modern UI/UX standards.
 - `/prompts:prompt-creator [requirements]` - Create Codex custom prompts with proper structure and best practices.
+- `/prompts:ac-prompt-*` - Converted prompts from awesome-copilot (GitHub Copilot), prefixed with `ac-prompt-`.
+- `/prompts:ac-agent-*` - Converted Copilot agents as Codex prompts (persona/style guidance), prefixed with `ac-agent-`.
+- `/prompts:ac-instructions-*` - Converted Copilot instructions as Codex prompts; apply manually or copy into `AGENTS.md`.
 
 ### Creating Custom Prompts
 
@@ -250,6 +253,43 @@ Extract subtitles/transcripts from a YouTube video URL and save as a local file.
 - `yt-dlp` (for CLI method), or
 - Browser automation MCP server (for fallback method)
 
+</details>
+
+<details>
+<summary>azure-role-selector - Least-privilege Azure role guidance</summary>
+
+#### [azure-role-selector](skills/azure-role-selector)
+
+Find the minimal Azure role for a permission set and generate CLI/Bicep role assignment guidance.
+
+**Requirements:**
+
+- Azure MCP server configured (recommended)
+</details>
+
+<details>
+<summary>webapp-testing - Playwright-based web app testing</summary>
+
+#### [webapp-testing](skills/webapp-testing)
+
+Automate browser-based checks for local web apps using Playwright (screenshots, logs, and UI interactions).
+
+**Requirements:**
+
+- Node.js available in the environment
+- Playwright will be installed as needed
+</details>
+
+<details>
+<summary>snowflake-semanticview - Snowflake semantic view workflow</summary>
+
+#### [snowflake-semanticview](skills/snowflake-semanticview)
+
+Create, alter, and validate Snowflake semantic views using the Snowflake CLI (`snow`).
+
+**Requirements:**
+
+- Snowflake CLI installed and configured (`snow --help`)
 </details>
 
 <details>
