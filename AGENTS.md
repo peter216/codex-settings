@@ -87,6 +87,16 @@ Before responding while Logging Mode is active, ask:
 
 If not, revise before responding.
 
+### Bash Environment Secrets
+
+- This applies any time Codex operates as an agent in a Bash environment, not only for Python tasks.
+- Before loading secret-backed environment variables, run: `source /home/peter216/.function/gopass.function` in the same shell session.
+- Load required variables with `gopassget` at runtime (example: `export FDC_API_KEY="$(gopassget FDC_API_KEY)"`).
+- Example for GitHub CLI auth in agent shells: `source /home/peter216/.function/gopass.function; export GITHUB_TOKEN="$(gh auth token --hostname github.com)"`.
+- To see what secrets are available in gopass, run: `gopass list --flat
+- Do not load secrets beginning with a . unless specifically directed, as these are typically meant to be hidden and not used in agent contexts.
+- Never hardcode or print secret values in logs/output; load only what is required for the current command.
+
 ### Python
 
 #### Package Management
