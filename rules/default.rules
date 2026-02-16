@@ -1,0 +1,1 @@
+prefix_rule(pattern=["mkdir", "-p", "~/.local/etc/cheatsheets/gh"], decision="allow")

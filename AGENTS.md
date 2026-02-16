@@ -83,9 +83,56 @@ Self-Check (Internal Reminder)
 
 Before responding while Logging Mode is active, ask:
 
-“Have I logged my intent and actions clearly for this step?”
+"Have I logged my intent and actions clearly for this step?"
 
 If not, revise before responding.
+
+### .codexlog and TRACE Log Level
+
+- This section pertains to the log file `.codexlog` and is active whenever Logging Mode is active, unless the level is explicitly changed by specifying `log-level <LEVEL>`, which will take effect for the rest of the subthread unless changed again.
+- Log the initial user request and every subsequent user interaction. This includes prompts back to the user and the user's response.
+- Record every step (including failures and retries) in `/home/peter216/git/www/.codexlog` at `TRACE` level (JSON lines preferred) by default; include `ts`, `level`, `message`, `details`, and `output` fields. These fields should be presented in the same way that they are in the chat output with log-on in effect.
+- Include steps even if they are not included in the user-facing chat for brevity. If this results in more than 10 logs a minute, stop and request permission to adjust so we can tune the logging frequency.
+- The `details` field should capture the `intent`, `action`, `checks`, `reasoning`, and `confidence` for each step, while `output` should capture the result or response.
+  - The format of the details field should be the same as the structured log format described in the Logging and Debugging section, except as a JSON object rather than free-form text.
+
+```json
+{
+  "intent": "Briefly describe the intent for this step",
+  "action": "Describe the action taken",
+  "checks": "List any checks performed",
+  "reasoning": "Summarize the reasoning steps",
+  "confidence": "Provide a confidence level if relevant"
+}
+```
+
+- If a step is skipped, log the omitted items and reason for skipping in the `details` field.
+- If confidence level is 65% or below, include the alternative paths considered and the rationale for the chosen path in the `details` field.
+- Ensure `.codexlog` entries are at least as detailed as the chat, include captured outputs, and truncate any field to 200 characters when necessary.
+- Continue writing to `.codexlog` as part of normal logging unless you are explicitly instructed to stop logging there.
+- Structure each entry so automated parsing can easily extract the fields (e.g., newline-delimited JSON objects).
+- This TRACE-level logging instruction is permanent until the instructions in this file (or another file in `/home/peter216/git/ai/codex-settings`) are updated to change it.
+
+### Debug count trend file prompt_log.csv
+
+- Maintain `/home/peter216/git/ai/codex-settings/tmp/prompt_log.csv` with columns `PROMPT_ID,BEGIN_TIME,END_TIME,NUM_LOGS,LOGS_PER_TEN_SEC`.
+- Ensure the directory `/home/peter216/git/ai/codex-settings/tmp` exists and the CSV file has a header row before appending.
+- Each time you finish fulfilling a prompt (i.e., before handing control back), append a row with:
+ 1. A unique `PROMPT_ID` (e.g., `prompt-<timestamp>`),
+ 2. `BEGIN_TIME` and `END_TIME` in UTC ISO format,
+ 3. `NUM_LOGS`: how many `.codexlog` entries you created during that prompt (parsed from `ts` >= `BEGIN_TIME`),
+ 4. `LOGS_PER_TEN_SEC`: `NUM_LOGS / max(1, duration_seconds / 10)` to represent logging density.
+- This CSV logging is required for every prompt and persists until someone edits this section or another relevant file in `/home/peter216/git/ai/codex-settings`.
+
+### Asking Questions
+
+- When you need more information to complete a task, ask the user a disambiguating question.
+- Challenge the user's assumptions if they seem incorrect or incomplete, but do so respectfully and with the goal of clarifying the task.
+- If the user's request is vague, ask for specific details (e.g., "When you say 'optimize the code', do you mean improving runtime performance, reducing memory usage, enhancing readability, or something else?").
+- If there are multiple ways to interpret the request, outline the options and ask the user to choose (e.g., "I see two possible approaches to this problem: A and B. Approach A would involve X, Y, Z, while Approach B would involve M, N, O. Which one would you prefer?").
+- Call out any hidden risks or implications of the user's request that they may not have considered (e.g., "Just to clarify, if I proceed with this action, it will also affect X and Y. Is that okay?").
+- If you are unsure about the user's intent, ask for confirmation before proceeding (e.g., "I want to make sure I understand your request correctly. You want me to do X, is that right?").
+- Preference is that you understand the goal as well as the task, so that fruitful dialogue can occur about how to best achieve the user's underlying goal, rather than just executing a task that may be suboptimal or even counterproductive.
 
 ### Bash Environment Secrets
 
