@@ -117,6 +117,10 @@ If not, revise before responding.
 
 - Maintain `/home/peter216/git/ai/codex-settings/tmp/prompt_log.csv` with columns `PROMPT_ID,BEGIN_TIME,END_TIME,NUM_LOGS,LOGS_PER_TEN_SEC`.
 - Ensure the directory `/home/peter216/git/ai/codex-settings/tmp` exists and the CSV file has a header row before appending.
+- Use `/home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py` as the mandatory completion path to append prompt telemetry and emit the final `.codexlog` completion event.
+- Recommended pattern:
+  - At prompt start: write start time to `/tmp/last_prompt_start.txt`.
+  - Before returning control: run `python /home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py --begin-time \"$(cat /tmp/last_prompt_start.txt)\"`.
 - Each time you finish fulfilling a prompt (i.e., before handing control back), append a row with:
  1. A unique `PROMPT_ID` (e.g., `prompt-<timestamp>`),
  2. `BEGIN_TIME` and `END_TIME` in UTC ISO format,

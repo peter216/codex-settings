@@ -1,1 +1,2 @@
 prefix_rule(pattern=["mkdir", "-p", "~/.local/etc/cheatsheets/gh"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "BEGIN_TIME=$(tail -n 1 /home/peter216/git/ai/codex-settings/tmp/prompt_log.csv | awk -F, '{print $3}') && python /home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py --begin-time \"$BEGIN_TIME\""], decision="allow")
