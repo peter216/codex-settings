@@ -3,14 +3,13 @@
 source /home/peter216/.function/logging.function
 
 TIMESTAMP=$(date -Iseconds)
-TESTNAME="${1:-$TIMESTAMP}"
-BRANCH_A="before_optimization"
-BRANCH_B="after_optimization"
-OUTPUT_DIR="/tmp/ab_test_results/${TESTNAME}"
-REPORTFILE_PREFIX="report-${TESTNAME}"
+BRANCH_A="${BRANCH_A:-before_optimization}"
+BRANCH_B="${BRANCH_B:-after_optimization}"
+SLEEP_DURATION="${SLEEP_DURATION:-0.20}"
+TESTNAME="${1:-$TIMESTAMP-$BRANCH_A-$BRANCH_B-$SLEEP_DURATION}"
+OUTPUT_DIR="${OUTPUT_DIR:-/tmp/ab_test_results/${TESTNAME}}"
 CODEXLOG_PREFIX="codexlog-${TESTNAME}"
 PROMPTLOG_PREFIX="promptlog-${TESTNAME}"
-SLEEP_DURATION=0.20
 
 log_info "Starting A/B test with name: ${TESTNAME}"
 log_action "Creating output directory: ${OUTPUT_DIR})"

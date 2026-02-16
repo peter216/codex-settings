@@ -332,6 +332,10 @@ def run_harness(workspace: Path, codexlog: Path, prompt_log: Path, variant: str,
 
         return report
     finally:
+        # First copy fixture_root to another location for post-test examination
+        archive_dir = workspace / f"ab_test_archive/{run_id}/{variant}/"
+        shutil.copytree(fixture_root, archive_dir, dirs_exist_ok=True)
+        shutil.copytree(symlinks=True, src=archive_dir, dst=f"/tmp/ab_test_latest/{variant}", dirs_exist_ok=True)
         shutil.rmtree(fixture_root, ignore_errors=True)
         _restore_snapshot(codexlog_snapshot)
         _restore_snapshot(prompt_snapshot)
