@@ -1,2 +1,5 @@
 prefix_rule(pattern=["mkdir", "-p", "~/.local/etc/cheatsheets/gh"], decision="allow")
 prefix_rule(pattern=["/bin/bash", "-lc", "BEGIN_TIME=$(tail -n 1 /home/peter216/git/ai/codex-settings/tmp/prompt_log.csv | awk -F, '{print $3}') && python /home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py --begin-time \"$BEGIN_TIME\""], decision="allow")
+prefix_rule(pattern=["python", "-m", "py_compile", "/home/peter216/git/ai/codex-settings/scripts/logging_ab_harness.py", "/home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py"], decision="allow")
+prefix_rule(pattern=["/bin/bash", "-lc", "python /home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py --begin-time \"$(cat /tmp/last_prompt_start.txt)\""], decision="allow")
+prefix_rule(pattern=["chmod", "+x", "/home/peter216/git/ai/codex-settings/scripts/compare_ab_reports.py"], decision="allow")

@@ -118,6 +118,7 @@ If not, revise before responding.
 - Maintain `/home/peter216/git/ai/codex-settings/tmp/prompt_log.csv` with columns `PROMPT_ID,BEGIN_TIME,END_TIME,NUM_LOGS,LOGS_PER_TEN_SEC`.
 - Ensure the directory `/home/peter216/git/ai/codex-settings/tmp` exists and the CSV file has a header row before appending.
 - Use `/home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py` as the mandatory completion path to append prompt telemetry and emit the final `.codexlog` completion event.
+- For benchmark or A/B runs, calculate step counts and log-rate metrics only from the current run scope (explicit run ID and/or begin-end window), deliberately excluding tasks/decisions from previous runs so results are unbiased.
 - Recommended pattern:
   - At prompt start: write start time to `/tmp/last_prompt_start.txt`.
   - Before returning control: run `python /home/peter216/git/ai/codex-settings/scripts/finalize_prompt.py --begin-time \"$(cat /tmp/last_prompt_start.txt)\"`.
